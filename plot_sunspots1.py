@@ -6,7 +6,7 @@
 """
 Summarize daily SILSO sunspot counts by year and save a relationship matrix.
 
-    uv run "plot copy.py"
+    uv run plot_sunspots.py
 """
 
 import csv
@@ -29,9 +29,13 @@ OUT = HERE / "out"
 
 FEATURES = [
     ("Annual mean", "Mean daily sunspot number"),
+    ("Annual median", "Median daily sunspot number"),
     ("Annual max", "Maximum daily sunspot number"),
-    ("Annual spread", "Daily standard deviation"),
-    ("Spotless days", "Spotless days (%)"),
+    ("Daily SD", "Standard deviation of daily counts"),
+    ("Daily IQR", "Interquartile range of daily counts"),
+    ("90th pct.", "90th percentile of daily counts"),
+    ("Spotless %", "Percentage of valid days with zero sunspots"),
+    ("High activity %", "Percentage of valid days with count >= 100"),
 ]
 
 PURPLE = "#8f8298"
@@ -65,11 +69,17 @@ def annual_metrics(path):
     for year, counts in sorted(daily_counts.items()):
         if len(counts) < MIN_VALID_DAYS:
             continue
+        quartiles = statistics.quantiles(counts, n=4, method="inclusive")
+        deciles = statistics.quantiles(counts, n=10, method="inclusive")
         years.append(year)
         values["Annual mean"].append(statistics.fmean(counts))
+        values["Annual median"].append(statistics.median(counts))
         values["Annual max"].append(max(counts))
-        values["Annual spread"].append(statistics.pstdev(counts))
-        values["Spotless days"].append(100 * sum(count == 0 for count in counts) / len(counts))
+        values["Daily SD"].append(statistics.pstdev(counts))
+        values["Daily IQR"].append(quartiles[2] - quartiles[0])
+        values["90th pct."].append(deciles[8])
+        values["Spotless %"].append(100 * sum(count == 0 for count in counts) / len(counts))
+        values["High activity %"].append(100 * sum(count >= 100 for count in counts) / len(counts))
     return years, values, len(daily_counts)
 
 
@@ -143,11 +153,12 @@ def main():
         spread = statistics.pstdev(values)
         standardized[label] = [(value - center) / spread if spread else 0 for value in values]
 
-    fig = plt.figure(figsize=(14, 9), facecolor="#fbfaf8")
+    feature_count = len(labels)
+    fig = plt.figure(figsize=(18, 15), facecolor="#fbfaf8")
     grid = fig.add_gridspec(
-        4, 6,
-        width_ratios=[1.45, 1, 1, 1, 1, 0.11],
-        left=0.07, right=0.94, top=0.86, bottom=0.10,
+        feature_count, feature_count + 2,
+        width_ratios=[1.5, *([1] * feature_count), 0.11],
+        left=0.055, right=0.95, top=0.86, bottom=0.12,
         wspace=0.12, hspace=0.12,
     )
 
@@ -161,7 +172,10 @@ def main():
         showextrema=False,
         widths=0.78,
     )
-    violin_colors = [LIGHT_GREEN, LIGHT_PURPLE, LIGHT_GREEN, LIGHT_PURPLE]
+    violin_colors = [
+        LIGHT_GREEN if index % 2 == 0 else LIGHT_PURPLE
+        for index in range(feature_count)
+    ]
     for index, body in enumerate(violins["bodies"]):
         body.set_facecolor(violin_colors[index])
         body.set_edgecolor(GREEN if index % 2 == 0 else PURPLE)
@@ -236,7 +250,7 @@ def main():
             axis_row.append(ax)
         axes.append(axis_row)
 
-    colorbar_ax = fig.add_subplot(grid[:, 5])
+    colorbar_ax = fig.add_subplot(grid[:, -1])
     colorbar = fig.colorbar(
         ScalarMappable(norm=Normalize(-1, 1), cmap=CORRELATION_CMAP),
         cax=colorbar_ax,
@@ -247,12 +261,22 @@ def main():
     fig.suptitle("SUNSPOT ACTIVITY", x=0.07, y=0.96, ha="left", fontsize=19, color=INK, fontweight="bold")
     fig.text(
         0.07, 0.915,
-        f"Annual metrics · {years[0]}–{years[-1]} · {len(years)} years · muted sage and plum",
+        f"Annual metrics from {DATA.name} · {years[0]}–{years[-1]} · {len(years)} usable years",
         ha="left", fontsize=10, color=MUTED,
     )
     fig.text(
-        0.07, 0.045,
-        "Daily values of -1 were excluded; years with fewer than 300 valid days were omitted.",
+        0.055, 0.085,
+        "Diagonal: distributions · upper: Spearman correlation · lower: one dot per year · left: standardized distributions",
+        fontsize=8, color=INK,
+    )
+    fig.text(
+        0.055, 0.060,
+        "Metrics: mean, median, max, daily SD, IQR, 90th percentile, spotless-day %, and high-activity-day % (count >= 100).",
+        fontsize=8, color=MUTED,
+    )
+    fig.text(
+        0.055, 0.035,
+        "Purple = negative correlation; green = positive. Daily -1 values and years with fewer than 300 valid days are excluded.",
         fontsize=8, color=MUTED,
     )
 
