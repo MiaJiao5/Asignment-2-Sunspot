@@ -20,7 +20,7 @@ from matplotlib.cm import ScalarMappable
 from matplotlib.colors import LinearSegmentedColormap, Normalize
 
 FILE = "SN_d_tot_V2.0.csv"
-PICTURE = "sunspot_relationship_matrix.png"
+PICTURE = "sunspot_relationship_activity.png"
 MIN_VALID_DAYS = 300
 
 HERE = Path(__file__).parent
@@ -154,11 +154,11 @@ def main():
         standardized[label] = [(value - center) / spread if spread else 0 for value in values]
 
     feature_count = len(labels)
-    fig = plt.figure(figsize=(18, 15), facecolor="#fbfaf8")
+    fig = plt.figure(figsize=(18, 17), facecolor="#fbfaf8")
     grid = fig.add_gridspec(
         feature_count, feature_count + 2,
         width_ratios=[1.5, *([1] * feature_count), 0.11],
-        left=0.055, right=0.95, top=0.86, bottom=0.12,
+        left=0.055, right=0.95, top=0.86, bottom=0.24,
         wspace=0.12, hspace=0.12,
     )
 
@@ -265,17 +265,17 @@ def main():
         ha="left", fontsize=10, color=MUTED,
     )
     fig.text(
-        0.055, 0.085,
+        0.055, 0.190,
         "Diagonal: distributions · upper: Spearman correlation · lower: one dot per year · left: standardized distributions",
         fontsize=8, color=INK,
     )
     fig.text(
-        0.055, 0.060,
+        0.055, 0.155,
         "Metrics: mean, median, max, daily SD, IQR, 90th percentile, spotless-day %, and high-activity-day % (count >= 100).",
         fontsize=8, color=MUTED,
     )
     fig.text(
-        0.055, 0.035,
+        0.055, 0.120,
         "Purple = negative correlation; green = positive. Daily -1 values and years with fewer than 300 valid days are excluded.",
         fontsize=8, color=MUTED,
     )
