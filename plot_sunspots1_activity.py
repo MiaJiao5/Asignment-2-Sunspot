@@ -154,7 +154,7 @@ def main():
         standardized[label] = [(value - center) / spread if spread else 0 for value in values]
 
     feature_count = len(labels)
-    fig = plt.figure(figsize=(18, 17), facecolor="#fbfaf8")
+    fig = plt.figure(figsize=(16, 12), facecolor="#fbfaf8")
     grid = fig.add_gridspec(
         feature_count, feature_count + 2,
         width_ratios=[1.5, *([1] * feature_count), 0.11],
@@ -265,17 +265,17 @@ def main():
         ha="left", fontsize=10, color=MUTED,
     )
     fig.text(
-        0.055, 0.190,
+        0.055, 0.165,
         "Diagonal: distributions · upper: Spearman correlation · lower: one dot per year · left: standardized distributions",
         fontsize=8, color=INK,
     )
     fig.text(
-        0.055, 0.155,
+        0.055, 0.137,
         "Metrics: mean, median, max, daily SD, IQR, 90th percentile, spotless-day %, and high-activity-day % (count >= 100).",
         fontsize=8, color=MUTED,
     )
     fig.text(
-        0.055, 0.120,
+        0.055, 0.109,
         "Purple = negative correlation; green = positive. Daily -1 values and years with fewer than 300 valid days are excluded.",
         fontsize=8, color=MUTED,
     )
