@@ -9,7 +9,9 @@ Then, in this order, at least 150 words in total.
 New to folders, paths, or the files here whose names start with a dot? Read
 https://github.com/sd5913/pfad/blob/2026/reference/files.md first. Ten minutes. -->
 
-![what the picture is](out/plot.png)
+![Sunspot data phyllotaxis mandala](out/sunspot_solar_bloom.png)
+
+[Open the interactive sunspot visualization](https://miajiao5.github.io/Asignment-2-Sunspot/)
 
 ## The phenomenon
 
@@ -30,5 +32,7 @@ you know what you did. -->
 
 ```
 uv run fetch.py
-uv run plot.py
+uv run .\plot_solar_bloom.py
 ```
+
+The script writes the interactive page to `site/index.html`; GitHub Pages publishes it after a push to `main`.
