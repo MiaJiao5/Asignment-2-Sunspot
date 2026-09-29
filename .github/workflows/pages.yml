@@ -30,7 +30,7 @@ jobs:
         uses: actions/configure-pages@v5
 
       - name: Build interactive page
-        run: uv run ./plot_solar_bloom.py
+        run: uv run ./plot_sunspots2_phyllotaxis_sunflower.py
         env:
           MPLBACKEND: Agg
 
