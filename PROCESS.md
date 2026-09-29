@@ -1,15 +1,10 @@
 # Process
-
-<!-- Same as assignment 1, same honesty. Which tools you used and for what; one
-thing you kept and why it was good; one thing you rejected and why it was wrong.
-"I did not use any" is fine if it is true.
-
-If a model wrote most of plot.py, which is likely and allowed, the interesting part
-is what you had to correct: did it invent a column name, use pandas where a list
-would do, silently drop the rows it could not parse? -->
+I used the built-in chat feature of VS Code to write the Python code. However, the styling and color inspiration for the relationship_activity chart were collected and inspired from Xiaohongshu.The inspiration for the phyllotaxis_sunflowe chart comes from sunflowers, rendered in a slightly abstract style. For both charts, I iteratively adjusted the prompts to ensure they meet my requirements and aesthetic standards.
 
 ## Tools
+The built-in chat feature of VS Code calls the GPT model, and then uses Doubao to polish the language.
 
 ## Kept
-
+The code is retained to process data into colors and shapes of varying shades.
 ## Rejected
+Adjusted issues such as misplaced and overlapping text, and held repeated conversations to confirm which chart contents the data was converted into, so as to avoid AI hallucinations.
