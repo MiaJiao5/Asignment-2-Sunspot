@@ -5,7 +5,7 @@
 
 r"""Turn the SILSO daily sunspot record into a chronological solar garden.
 
-    uv run .\plot_solar_bloom.py
+    uv run .\plot_sunspots2_phyllotaxis_sunflower.py
 """
 
 import csv
@@ -21,7 +21,7 @@ from matplotlib.patches import Circle
 import plotly.graph_objects as go
 
 FILE = "SN_d_tot_V2.0.csv"
-PICTURE = "sunspot_solar_bloom.png"
+PICTURE = "sunspots2_phyllotaxis_sunflower.py.png"
 MIN_YEAR_DAYS = 300
 MIN_MONTH_DAYS = 15
 HERE = Path(__file__).parent

@@ -27,10 +27,11 @@ This chart compares eight annual measures of sunspot activity, including the mea
 
 Each seed represents one month arranged in chronological order along a spiral; its color shows the monthly mean sunspot count, and its size shows daily variation. The outer annual ring encodes yearly mean activity through tick length and radial distance, while green color indicates the share of spotless days; the rays mark peaks in the 13-month-smoothed activity record. Invalid daily readings are excluded, months with fewer than 15 valid observations and years with fewer than 300 valid days are omitted, and the 1829–1848 observation gap remains visible in the record.
 
-
 ## Run it
 uv run fetch.py
+
 uv run .\plot_sunspots1_activity.py
+
 uv run .\plot_sunspots2_phyllotaxis_sunflower.py
 
 The fetch step downloads the SILSO data only if it is not already present. The first plotting script saves the relationship matrix to `out/`; the second saves the sunflower image to `out/` and generates the interactive page at `site/index.html`.
